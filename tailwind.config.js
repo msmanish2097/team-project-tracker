@@ -9,9 +9,9 @@ module.exports = {
       colors: {
         border: "hsl(220, 13%, 91%)",
         input: "hsl(220, 13%, 91%)",
-        ring: "hsl(262, 83%, 58%)",
-        background: "hsl(240, 10%, 98%)",
-        foreground: "hsl(240, 10%, 4%)",
+        ring: "hsl(217, 91%, 60%)",
+        background: "hsl(0, 0%, 98%)",
+        foreground: "hsl(220, 9%, 20%)",
         primary: {
           DEFAULT: "hsl(262, 83%, 58%)",
           foreground: "hsl(0, 0%, 100%)",

@@ -8,6 +8,10 @@ export default defineConfig({
   plugins: [react()],
   publicDir: "./static",
   base: "./",
+  build: {
+    outDir: "dist",
+    sourcemap: false,
+  },
   css: {
     postcss: {
       plugins: [tailwind()],
