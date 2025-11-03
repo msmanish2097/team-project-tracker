@@ -13,7 +13,7 @@ export function Dashboard() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
           <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">
             <span className="text-h2">🏠</span>
@@ -23,7 +23,7 @@ export function Dashboard() {
             <p className="text-small text-muted-foreground">Don't be afraid to talk, be afraid of staying quiet.</p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <Button variant="outline" className="bg-background text-foreground border-border">
             <span className="mr-2">🎨</span>
             Customize
@@ -62,24 +62,32 @@ export function Dashboard() {
 
           {/* Active Projects List */}
           <div className="space-y-3">
-            {activeProjects.map((project) => (
-              <Card key={project.id} className="bg-card border-border hover:shadow-md transition-all">
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <input type="checkbox" className="w-5 h-5 rounded border-border" />
-                      <div className="w-2 h-2 rounded-full bg-warning"></div>
-                      <span className="text-body text-foreground">{project.name}</span>
+            {activeProjects.length > 0 ? (
+              activeProjects.map((project) => (
+                <Card key={project.id} className="bg-card border-border hover:shadow-md transition-all">
+                  <CardContent className="p-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <input type="checkbox" className="w-5 h-5 rounded border-border" />
+                        <div className="w-2 h-2 rounded-full bg-warning"></div>
+                        <span className="text-body text-foreground">{project.name}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="px-2 py-1 rounded-full bg-destructive text-destructive-foreground text-xs">
+                          {Math.ceil((new Date(project.deadline).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))}d
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="px-2 py-1 rounded-full bg-destructive text-destructive-foreground text-xs">
-                        {Math.ceil((new Date(project.deadline).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))}d
-                      </span>
-                    </div>
-                  </div>
+                  </CardContent>
+                </Card>
+              ))
+            ) : (
+              <Card className="bg-card border-border">
+                <CardContent className="p-8 text-center">
+                  <p className="text-muted-foreground">No active projects. Create one to get started!</p>
                 </CardContent>
               </Card>
-            ))}
+            )}
           </div>
 
           {/* What are you working on Card */}
@@ -89,8 +97,8 @@ export function Dashboard() {
                 <div className="flex-1">
                   <h3 className="text-h2 font-sans text-foreground mb-2">What are you working on?</h3>
                   <p className="text-body text-muted-foreground mb-6">Try to have at least 1 item in progress</p>
-                  <div className="flex items-center gap-3">
-                    <Button className="bg-success text-success-foreground hover:bg-success/90">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <Button onClick={() => setCreateModalOpen(true)} className="bg-success text-success-foreground hover:bg-success/90">
                       <PlusIcon className="w-5 h-5 mr-2" />
                       Add new task
                     </Button>
@@ -102,7 +110,6 @@ export function Dashboard() {
                 <div className="hidden lg:block">
                   <div className="w-48 h-48 relative">
                     <svg viewBox="0 0 200 200" className="w-full h-full">
-                      {/* Illustration placeholder */}
                       <circle cx="100" cy="80" r="30" fill="#6366f1" />
                       <rect x="70" y="110" width="60" height="80" rx="30" fill="#6366f1" />
                       <circle cx="85" cy="70" r="8" fill="#fbbf24" />

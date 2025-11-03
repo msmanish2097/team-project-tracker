@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 import { TeamMember } from './projectStore';
-import { supabase } from '@/lib/supabase';
 
 export interface LeaveRequest {
   id: string;
@@ -83,114 +82,30 @@ export const useLeaveStore = create<LeaveState>((set) => ({
   leaveRequests: mockLeaveRequests,
   isLeaveModalOpen: false,
   selectedLeave: null,
-  addLeaveRequest: async (leaveData) => {
-    const supabaseUrl = typeof import.meta !== 'undefined' ? import.meta.env?.VITE_SUPABASE_URL : '';
-    const days = calculateDays(leaveData.startDate, leaveData.endDate);
-    
-    if (supabaseUrl && supabaseUrl !== 'your_supabase_project_url_here') {
-      try {
-        const { data, error } = await supabase
-          .from('leave_requests')
-          .insert({
-            employee_id: leaveData.employeeId,
-            leave_type: leaveData.leaveType,
-            start_date: leaveData.startDate.toISOString().split('T')[0],
-            end_date: leaveData.endDate.toISOString().split('T')[0],
-            reason: leaveData.reason,
-            status: leaveData.status,
-            days: days,
-          })
-          .select()
-          .single();
-
-        if (error) throw error;
-
-        const newLeave: LeaveRequest = {
+  addLeaveRequest: (leaveData) =>
+    set((state) => ({
+      leaveRequests: [
+        ...state.leaveRequests,
+        {
           ...leaveData,
-          id: data.id,
-          appliedDate: new Date(data.applied_date),
-          days: days,
-        };
-
-        set((state) => ({
-          leaveRequests: [...state.leaveRequests, newLeave],
-        }));
-      } catch (error) {
-        console.error('Error adding leave request:', error);
-        set((state) => ({
-          leaveRequests: [
-            ...state.leaveRequests,
-            {
-              ...leaveData,
-              id: Date.now().toString(),
-              appliedDate: new Date(),
-              days: days,
-            },
-          ],
-        }));
-      }
-    } else {
-      set((state) => ({
-        leaveRequests: [
-          ...state.leaveRequests,
-          {
-            ...leaveData,
-            id: Date.now().toString(),
-            appliedDate: new Date(),
-            days: days,
-          },
-        ],
-      }));
-    }
-  },
-  updateLeaveStatus: async (id, status, approvedBy) => {
-    const supabaseUrl = typeof import.meta !== 'undefined' ? import.meta.env?.VITE_SUPABASE_URL : '';
-    
-    if (supabaseUrl && supabaseUrl !== 'your_supabase_project_url_here') {
-      try {
-        const { error } = await supabase
-          .from('leave_requests')
-          .update({
-            status: status,
-            approved_by: approvedBy,
-            approved_date: new Date().toISOString(),
-          })
-          .eq('id', id);
-
-        if (error) throw error;
-      } catch (error) {
-        console.error('Error updating leave status:', error);
-      }
-    }
-
+          id: Date.now().toString(),
+          appliedDate: new Date(),
+          days: calculateDays(leaveData.startDate, leaveData.endDate),
+        },
+      ],
+    })),
+  updateLeaveStatus: (id, status, approvedBy) =>
     set((state) => ({
       leaveRequests: state.leaveRequests.map((leave) =>
         leave.id === id
           ? { ...leave, status, approvedBy, approvedDate: new Date() }
           : leave
       ),
-    }));
-  },
-  deleteLeaveRequest: async (id) => {
-    const supabaseUrl = typeof import.meta !== 'undefined' ? import.meta.env?.VITE_SUPABASE_URL : '';
-    
-    if (supabaseUrl && supabaseUrl !== 'your_supabase_project_url_here') {
-      try {
-        const { error } = await supabase
-          .from('leave_requests')
-          .delete()
-          .eq('id', id);
-
-        if (error) throw error;
-      } catch (error) {
-        console.error('Error deleting leave request:', error);
-      }
-    }
-
+    })),
+  deleteLeaveRequest: (id) =>
     set((state) => ({
       leaveRequests: state.leaveRequests.filter((leave) => leave.id !== id),
-    }));
-  },
+    })),
   setLeaveModalOpen: (open) => set({ isLeaveModalOpen: open }),
   setSelectedLeave: (leave) => set({ selectedLeave: leave }),
 }));

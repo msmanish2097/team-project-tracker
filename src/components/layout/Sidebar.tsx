@@ -40,7 +40,7 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
               <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
                 <span className="text-primary-foreground font-sans font-bold">P</span>
               </div>
-              <h1 className="text-body font-sans font-semibold text-foreground">ProjectHub</h1>
+              <h1 className="text-body font-sans font-semibold text-white">ProjectHub</h1>
             </div>
           )}
           {isCollapsed && (
@@ -58,8 +58,10 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
               <Link key={item.path} to={item.path}>
                 <Button
                   variant="ghost"
-                  className={`w-full justify-start gap-3 text-foreground hover:bg-accent hover:text-accent-foreground rounded-lg ${
-                    active ? 'bg-accent text-accent-foreground' : 'bg-transparent'
+                  className={`w-full justify-start gap-3 rounded-lg ${
+                    active 
+                      ? 'bg-[#3e3e42] text-white' 
+                      : 'bg-transparent text-[#cccccc] hover:bg-[#3e3e42] hover:text-white'
                   } ${isCollapsed ? 'px-2' : 'px-3'}`}
                 >
                   <Icon className="w-5 h-5 flex-shrink-0" />
@@ -80,7 +82,7 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
               </div>
               {!isCollapsed && (
                 <div className="flex-1">
-                  <p className="text-small font-sans-alt font-normal text-foreground">My Space</p>
+                  <p className="text-small font-sans-alt font-normal text-[#cccccc]">My Space</p>
                 </div>
               )}
             </div>
@@ -88,7 +90,7 @@ export function Sidebar({ isCollapsed, onToggle }: SidebarProps) {
           <Link to="/settings">
             <Button
               variant="ghost"
-              className={`w-full justify-start gap-3 bg-transparent text-foreground hover:bg-accent hover:text-accent-foreground ${
+              className={`w-full justify-start gap-3 bg-transparent text-[#cccccc] hover:bg-[#3e3e42] hover:text-white ${
                 isCollapsed ? 'px-2' : 'px-4'
               }`}
             >

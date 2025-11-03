@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { supabase } from '@/lib/supabase';
 
 export interface TeamMember {
   id: string;
@@ -140,35 +139,20 @@ const mockProjects: Project[] = [
   },
 ];
 
-export const useProjectStore = create<ProjectState>((set, get) => ({
+export const useProjectStore = create<ProjectState>((set) => ({
   projects: mockProjects,
   selectedProject: null,
   isCreateModalOpen: false,
   isEditMode: false,
-  addProject: async (projectData) => {
-    const supabaseUrl = typeof import.meta !== 'undefined' ? import.meta.env?.VITE_SUPABASE_URL : '';
-    
-    if (supabaseUrl && supabaseUrl !== 'your_supabase_project_url_here') {
-      try {
-        const { data, error } = await supabase
-          .from('projects')
-          .insert({
-            name: projectData.name,
-            description: projectData.description,
-            status: projectData.status,
-            deadline: projectData.deadline.toISOString(),
-            progress: projectData.progress,
-          })
-          .select()
-          .single();
-
-        if (error) throw error;
-
-        const newProject: Project = {
+  addProject: (projectData) =>
+    set((state) => ({
+      projects: [
+        ...state.projects,
+        {
           ...projectData,
-          id: data.id,
-          createdAt: new Date(data.created_at),
-          updatedAt: new Date(data.updated_at),
+          id: Date.now().toString(),
+          createdAt: new Date(),
+          updatedAt: new Date(),
           recentActivity: [
             {
               id: Date.now().toString(),
@@ -178,79 +162,10 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
               user: projectData.assignedMembers[0],
             },
           ],
-        };
-
-        set((state) => ({
-          projects: [...state.projects, newProject],
-        }));
-      } catch (error) {
-        console.error('Error adding project:', error);
-        set((state) => ({
-          projects: [
-            ...state.projects,
-            {
-              ...projectData,
-              id: Date.now().toString(),
-              createdAt: new Date(),
-              updatedAt: new Date(),
-              recentActivity: [
-                {
-                  id: Date.now().toString(),
-                  type: 'created',
-                  message: 'Project created',
-                  timestamp: new Date(),
-                  user: projectData.assignedMembers[0],
-                },
-              ],
-            },
-          ],
-        }));
-      }
-    } else {
-      set((state) => ({
-        projects: [
-          ...state.projects,
-          {
-            ...projectData,
-            id: Date.now().toString(),
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            recentActivity: [
-              {
-                id: Date.now().toString(),
-                type: 'created',
-                message: 'Project created',
-                timestamp: new Date(),
-                user: projectData.assignedMembers[0],
-              },
-            ],
-          },
-        ],
-      }));
-    }
-  },
-  updateProject: async (id, updates) => {
-    const supabaseUrl = typeof import.meta !== 'undefined' ? import.meta.env?.VITE_SUPABASE_URL : '';
-    
-    if (supabaseUrl && supabaseUrl !== 'your_supabase_project_url_here') {
-      try {
-        const { error } = await supabase
-          .from('projects')
-          .update({
-            name: updates.name,
-            description: updates.description,
-            status: updates.status,
-            deadline: updates.deadline ? new Date(updates.deadline).toISOString() : undefined,
-            progress: updates.progress,
-          })
-          .eq('id', id);
-
-        if (error) throw error;
-      } catch (error) {
-        console.error('Error updating project:', error);
-      }
-    }
-
+        },
+      ],
+    })),
+  updateProject: (id, updates) =>
     set((state) => ({
       projects: state.projects.map((project) =>
         project.id === id
@@ -261,29 +176,12 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
         state.selectedProject?.id === id
           ? { ...state.selectedProject, ...updates, updatedAt: new Date() }
           : state.selectedProject,
-    }));
-  },
-  deleteProject: async (id) => {
-    const supabaseUrl = typeof import.meta !== 'undefined' ? import.meta.env?.VITE_SUPABASE_URL : '';
-    
-    if (supabaseUrl && supabaseUrl !== 'your_supabase_project_url_here') {
-      try {
-        const { error } = await supabase
-          .from('projects')
-          .delete()
-          .eq('id', id);
-
-        if (error) throw error;
-      } catch (error) {
-        console.error('Error deleting project:', error);
-      }
-    }
-
+    })),
+  deleteProject: (id) =>
     set((state) => ({
       projects: state.projects.filter((project) => project.id !== id),
       selectedProject: state.selectedProject?.id === id ? null : state.selectedProject,
-    }));
-  },
+    })),
   setSelectedProject: (project) => set({ selectedProject: project }),
   setCreateModalOpen: (open) => set({ isCreateModalOpen: open, isEditMode: false }),
   setEditMode: (mode) => set({ isEditMode: mode }),

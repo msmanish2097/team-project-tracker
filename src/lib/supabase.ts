@@ -1,118 +1,12 @@
-import { createClient } from '@supabase/supabase-js';
+// Supabase integration removed
+// The app now uses in-memory state management with Zustand
+// Data will be stored in browser memory (resets on page refresh)
 
-const supabaseUrl = typeof import.meta !== 'undefined' ? (import.meta.env?.VITE_SUPABASE_URL || '') : '';
-const supabaseAnonKey = typeof import.meta !== 'undefined' ? (import.meta.env?.VITE_SUPABASE_ANON_KEY || '') : '';
+// To add database persistence later, you can:
+// 1. Set up Supabase account at https://supabase.com
+// 2. Run the SQL from SUPABASE_SETUP.sql
+// 3. Install: npm install @supabase/supabase-js
+// 4. Add credentials to .env file
+// 5. Uncomment the database code in stores
 
-export const supabase = supabaseUrl && supabaseAnonKey ? createClient(supabaseUrl, supabaseAnonKey) : createClient('https://placeholder.supabase.co', 'placeholder-key');
-
-export interface Database {
-  public: {
-    Tables: {
-      team_members: {
-        Row: {
-          id: string;
-          name: string;
-          email: string;
-          avatar: string;
-          role: string;
-          created_at: string;
-          updated_at: string;
-        };
-        Insert: {
-          id?: string;
-          name: string;
-          email: string;
-          avatar: string;
-          role?: string;
-          created_at?: string;
-          updated_at?: string;
-        };
-        Update: {
-          id?: string;
-          name?: string;
-          email?: string;
-          avatar?: string;
-          role?: string;
-          created_at?: string;
-          updated_at?: string;
-        };
-      };
-      projects: {
-        Row: {
-          id: string;
-          name: string;
-          description: string;
-          status: 'planning' | 'active' | 'completed' | 'on-hold';
-          deadline: string;
-          progress: number;
-          created_at: string;
-          updated_at: string;
-        };
-        Insert: {
-          id?: string;
-          name: string;
-          description: string;
-          status: 'planning' | 'active' | 'completed' | 'on-hold';
-          deadline: string;
-          progress?: number;
-          created_at?: string;
-          updated_at?: string;
-        };
-        Update: {
-          id?: string;
-          name?: string;
-          description?: string;
-          status?: 'planning' | 'active' | 'completed' | 'on-hold';
-          deadline?: string;
-          progress?: number;
-          created_at?: string;
-          updated_at?: string;
-        };
-      };
-      leave_requests: {
-        Row: {
-          id: string;
-          employee_id: string;
-          leave_type: 'vacation' | 'sick' | 'personal' | 'unpaid';
-          start_date: string;
-          end_date: string;
-          reason: string;
-          status: 'pending' | 'approved' | 'rejected';
-          days: number;
-          applied_date: string;
-          approved_by: string | null;
-          approved_date: string | null;
-          created_at: string;
-        };
-        Insert: {
-          id?: string;
-          employee_id: string;
-          leave_type: 'vacation' | 'sick' | 'personal' | 'unpaid';
-          start_date: string;
-          end_date: string;
-          reason: string;
-          status?: 'pending' | 'approved' | 'rejected';
-          days: number;
-          applied_date?: string;
-          approved_by?: string | null;
-          approved_date?: string | null;
-          created_at?: string;
-        };
-        Update: {
-          id?: string;
-          employee_id?: string;
-          leave_type?: 'vacation' | 'sick' | 'personal' | 'unpaid';
-          start_date?: string;
-          end_date?: string;
-          reason?: string;
-          status?: 'pending' | 'approved' | 'rejected';
-          days?: number;
-          applied_date?: string;
-          approved_by?: string | null;
-          approved_date?: string | null;
-          created_at?: string;
-        };
-      };
-    };
-  };
-}
+export const supabase = null;
