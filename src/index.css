@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-background: 0 0% 100%;
+    --color-foreground: 210 25% 12%;
+    --color-primary: 262 83% 58%;
+    --color-primary-foreground: 0 0% 100%;
+    --color-secondary: 217 91% 60%;
+    --color-secondary-foreground: 0 0% 100%;
+    --color-tertiary: 280 100% 70%;
+    --color-tertiary-foreground: 0 0% 100%;
+    --color-neutral: 0 0% 98%;
+    --color-neutral-foreground: 210 15% 10%;
+    --color-success: 142 58% 45%;
+    --color-success-foreground: 0 0% 100%;
+    --color-warning: 37 90% 55%;
+    --color-warning-foreground: 210 25% 12%;
+    --color-destructive: 0 84% 60%;
+    --color-destructive-foreground: 0 0% 100%;
+    --color-muted: 210 20% 95%;
+    --color-muted-foreground: 210 10% 40%;
+    --color-accent: 210 20% 95%;
+    --color-accent-foreground: 210 25% 12%;
+    --color-popover: 0 0% 100%;
+    --color-popover-foreground: 210 25% 12%;
+    --color-card: 0 0% 100%;
+    --color-card-foreground: 210 25% 12%;
+    --color-border: 210 15% 90%;
+    --color-input: 210 15% 90%;
+    --color-ring: 197 85% 43%;
+    --font-sans: "Poppins", sans-serif;
+    --font-sans-alt: "Inter", sans-serif;
+    --font-mono: "JetBrains Mono", monospace;
+    --corner-radius: 12px;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html,
+  body {
+    @apply bg-background text-foreground font-sans-alt;
+    font-weight: 300;
+  }
+
+  h1 {
+    @apply text-h1 font-sans;
+  }
+
+  h2 {
+    @apply text-h2 font-sans;
+  }
+
+  p {
+    @apply text-body text-foreground;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
